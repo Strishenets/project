@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -24,7 +23,7 @@ int menu (int user_action)
     printf ("\t4. Додати(видалити) продукт до кошику за кодом\n");
     printf ("\t5. Перегляд кошику\n");
     printf ("\t6. Оформлення замовлення\n");
-    printf ("\t7. Про проєкт\n");
+    printf ("\t7. Історія замовлень\n");
     printf ("\t8. Вихід\n");
     printf("--------------------------------------------------------\n");
     printf ("Опція: ");
@@ -342,8 +341,10 @@ void cart_output(struct prod_info products[19], int cart[100], int kilk_cart)
     }
 }
 
-void order_process(struct prod_info products[19], int cart[100], int kilk_cart)
+float order_process(struct prod_info products[19], int cart[100], int kilk_cart, int kilk_order, float total_order)
 {
+    FILE *order_history;
+    order_history = fopen("order_history", "a");
     int i, j;
     float total=0.00;
 
@@ -354,6 +355,7 @@ void order_process(struct prod_info products[19], int cart[100], int kilk_cart)
     else
     {
        printf ("В вашому кошику є:\n");
+       fprintf (order_history, "Замовлення %d\n", kilk_order);
         for (j=0; j<=kilk_cart; j++)
         {
             for (i=0; i<19; i++)
@@ -361,13 +363,46 @@ void order_process(struct prod_info products[19], int cart[100], int kilk_cart)
                 if (cart[j]==products[i].code)
                 {
                     printf ("\t%d. %s, %s, розмір %s, ціна %0.2f\n", j+1, products[i].name, products[i].gender, products[i].size, products[i].cost);
+                    fprintf (order_history,"\t%d. %s, %s, розмір %s, ціна %0.2f\n", j+1, products[i].name, products[i].gender, products[i].size, products[i].cost);
                     total=total+products[i].cost;
+                    cart[j]=0;
                 }
             }
         }
         printf("--------------------------------------------------------\n");
         printf ("Загальна сума %0.2f\n", total);
+        printf("----------------------------\n");
+        fprintf (order_history, "--------------------------------------------------------\nЗагальна сума %0.2f\n", total);
     }
+
+    total_order=total_order+total;
+    fclose(order_history);
+    return total_order;
+}
+
+void all_order(int kilk_order, float total_order)
+{
+    FILE *order_history;
+    order_history = fopen("order_history", "r");
+
+    if (kilk_order == 0)
+    {
+
+        printf("Історія замовлень порожня\n");
+    }
+    else
+    {
+        printf("Історія замовлень:\n");
+        char file_info[256];
+        while (fgets(file_info, sizeof(file_info), order_history) != NULL)
+        {
+            printf("%s", file_info);
+        }
+    }
+    printf("--------------------------------------------------------\n");
+    printf ("Загальна сума всіх замовлень: %0.2f\n", total_order);
+
+    fclose(order_history);
 }
 
 int main()
@@ -380,7 +415,14 @@ int main()
     struct prod_info products[19];
     katalog (products);
 
-    int cart[100], kilk_cart=0;
+    int cart[100];
+    float kilk_cart=0;
+
+    int kilk_order = 0, total_order = 0;
+
+    FILE *order_history;
+    order_history = fopen("order_history", "w+");
+    fclose(order_history);
 
     while (user_action!=8)
     {
@@ -414,18 +456,20 @@ int main()
             }
         case 6:
             {
-                order_process(products, cart, kilk_cart);
+                kilk_order = kilk_order+1;
+                total_order = order_process(products, cart, kilk_cart, kilk_order, total_order);
+                kilk_cart = 0;
                 continue;
             }
         case 7:
             {
-                our_project();
+                all_order(kilk_order, total_order);
                 continue;
             }
         case 8:
             {
                 printf("Вихід");
-                for (int i = 0; text[i] != '\0'; i++)
+                 for (int i = 0; text[i] != '\0'; i++)
                 {
                     printf("%c", text[i]);
                     fflush(stdout);
@@ -441,7 +485,6 @@ int main()
         }
     }
     katalog();
-
     return 0;
 }
 
