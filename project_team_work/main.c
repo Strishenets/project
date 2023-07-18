@@ -24,7 +24,8 @@ int menu (int user_action)
     printf ("\t5. Перегляд кошику\n");
     printf ("\t6. Оформлення замовлення\n");
     printf ("\t7. Історія замовлень\n");
-    printf ("\t8. Вихід\n");
+    printf ("\t8. Про нас\n");
+    printf ("\t9. Вихід\n");
     printf("--------------------------------------------------------\n");
     printf ("Опція: ");
     scanf ("%d", &user_action);
@@ -259,7 +260,7 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
                 {
                     cart[kilk_cart]=products[i].code;
                     kilk_cart = kilk_cart+1;
-                    printf("----------------------------\n");
+                    printf("--------------------------------------------------------\n");
                     printf ("Було додано продукт %d до кошика\n", cart[kilk_cart-1]);
                     absent=1;
                     break;
@@ -267,6 +268,7 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
             }
             if (absent==0)
             {
+                printf("--------------------------------------------------------\n");
                 printf("Продукту з таким кодом немає\n");
             }
             break;
@@ -283,7 +285,7 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
                     cart[j]=cart[kilk_cart];
                     cart[kilk_cart]=0;
                     kilk_cart = kilk_cart-1;
-                    printf("----------------------------\n");
+                    printf("--------------------------------------------------------\n");
                     printf ("Було видалено продукт %d з кошика\n", user_code);
                     absent=1;
                     break;
@@ -293,7 +295,6 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
             {
                 printf("--------------------------------------------------------\n");
                 printf("Продукту з таким кодом немає\n");
-                printf("--------------------------------------------------------\n");
             }
             break;
         }
@@ -355,7 +356,8 @@ float order_process(struct prod_info products[19], int cart[100], int kilk_cart,
     else
     {
        printf ("В вашому кошику є:\n");
-       fprintf (order_history, "Замовлення %d\n", kilk_order);
+       printf("----------------------------\n");
+       fprintf (order_history, "Замовлення %d:\n", kilk_order);
         for (j=0; j<=kilk_cart; j++)
         {
             for (i=0; i<19; i++)
@@ -370,9 +372,9 @@ float order_process(struct prod_info products[19], int cart[100], int kilk_cart,
             }
         }
         printf("--------------------------------------------------------\n");
-        printf ("Загальна сума %0.2f\n", total);
-        printf("----------------------------\n");
-        fprintf (order_history, "--------------------------------------------------------\nЗагальна сума %0.2f\n", total);
+        fprintf(order_history, "--------------------------------------------------------\n");
+        printf ("Загальна сума %0.2f:\n", total);
+        fprintf (order_history, "Загальна сума %0.2f\n--------------------------------------------------------\n", total);
     }
 
     total_order=total_order+total;
@@ -387,19 +389,20 @@ void all_order(int kilk_order, float total_order)
 
     if (kilk_order == 0)
     {
-
+        printf("--------------------------------------------------------\n");
         printf("Історія замовлень порожня\n");
     }
     else
     {
         printf("Історія замовлень:\n");
+        printf("----------------------------\n");
         char file_info[256];
         while (fgets(file_info, sizeof(file_info), order_history) != NULL)
         {
             printf("%s", file_info);
         }
     }
-    printf("--------------------------------------------------------\n");
+    //printf("--------------------------------------------------------\n");
     printf ("Загальна сума всіх замовлень: %0.2f\n", total_order);
 
     fclose(order_history);
@@ -424,7 +427,7 @@ int main()
     order_history = fopen("order_history", "w+");
     fclose(order_history);
 
-    while (user_action!=8)
+    while (user_action!=9)
     {
         user_action = menu(user_action);
         switch (user_action)
@@ -466,7 +469,14 @@ int main()
                 all_order(kilk_order, total_order);
                 continue;
             }
+
         case 8:
+            {
+                our_project();
+                continue;
+            }
+
+        case 9:
             {
                 printf("Вихід");
                  for (int i = 0; text[i] != '\0'; i++)
@@ -616,6 +626,7 @@ void our_project()
     printf ("\t4. Додавання та видалення товару з кошику\n");
     printf ("\t5. Перегляд товарів в кошику\n");
     printf ("\t6. Оформлення замовлення та загальна ціна\n");
+    printf("--------------------------------------------------------\n");
     printf ("Проєкт виконали студентки групи ІПЗ-22007б\n");
     printf ("\tМалинка Тетяна\n\tСтрішенець Ангеліна\n\tПилипенко Наталія\n\tДацюк Неля\n");
 }
