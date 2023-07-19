@@ -44,7 +44,7 @@ int menu (int user_action)
     return user_action;
 }
 
-void init_catalog_data_output(int total_products, struct prod_info products[total_products])
+void show_init_catalog_data_output(int total_products, struct prod_info products[total_products])
 {
     printf("\tКаталог одягу:\n");
     for (int i = 0; i < total_products; i++)
@@ -308,7 +308,7 @@ int add_prod (int total_products, struct prod_info products[total_products], int
     return count_cart;
 }
 
-void cart_output(int total_products, struct prod_info products[total_products],int total_cart, int cart[total_cart], int count_cart)
+void show_cart(int total_products, struct prod_info products[total_products],int total_cart, int cart[total_cart], int count_cart)
 {
     int i, j;
     if (count_cart==0)
@@ -371,7 +371,7 @@ float order_process(int total_products, struct prod_info products[total_products
     return total_order;
 }
 
-void all_order(int count_order, float total_order)
+void show_all_order(int count_order, float total_order)
 {
     FILE *order_history;
     order_history = fopen("order_history", "r");
@@ -423,7 +423,7 @@ int main()
         {
         case 1:
             {
-                init_catalog_data_output(total_products, products);
+                show_init_catalog_data(total_products, products);
                 continue;
             }
         case 2:
@@ -443,7 +443,7 @@ int main()
             }
         case 5:
             {
-                cart_output(total_products, products, total_cart, cart, count_cart);
+                show_cart(total_products, products, total_cart, cart, count_cart);
                 continue;
             }
         case 6:
@@ -455,7 +455,7 @@ int main()
             }
         case 7:
             {
-                all_order(count_order, total_order);
+                show_all_order(count_order, total_order);
                 continue;
             }
 
