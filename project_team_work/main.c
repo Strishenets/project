@@ -27,18 +27,6 @@ int menu (int user_action)
     printf ("\t8. Про нас\n");
     printf ("\t9. Вихід\n");
     printf("--------------------------------------------------------\n");
-    printf("\n--------------------------------------------------------\n");
-    printf ("\tОберіть функцію:\n");
-    printf("--------------------------------------------------------\n");
-    printf ("\t1. Переглянути каталог\n");
-    printf ("\t2. Фільтри\n");
-    printf ("\t3. Знайти товар по коду\n");
-    printf ("\t4. Додати(видалити) продукт до кошику за кодом\n");
-    printf ("\t5. Перегляд кошику\n");
-    printf ("\t6. Оформлення замовлення\n");
-    printf ("\t7. Про проєкт\n");
-    printf ("\t8. Вихід\n");
-    printf("--------------------------------------------------------\n");
     printf ("Опція: ");
     scanf ("%d", &user_action);
     printf("--------------------------------------------------------\n");
@@ -46,7 +34,7 @@ int menu (int user_action)
     return user_action;
 }
 
-void katalog_output(struct prod_info products[19])
+void init_catalog_data_output(struct prod_info products[19])
 {
     printf("\tКаталог одягу:\n");
     for (int i = 0; i < 19; i++)
@@ -56,7 +44,7 @@ void katalog_output(struct prod_info products[19])
         printf("\tНазва: %s\n", products[i].name);
         printf("\tКод: %d\n", products[i].code);
         printf("\tГендер: %s\n", products[i].gender);
-        printf("\tРазмір: %s\n", products[i].size);
+        printf("\tРозмір: %s\n", products[i].size);
         printf("\tЦіна: %.2f\n", products[i].cost);
 
     }
@@ -66,7 +54,7 @@ void katalog_output(struct prod_info products[19])
 void filter_choose(struct prod_info products[19])
 {
     char fil_gender[10], fil_size[5];
-    int user_action_filter, user_action_filter_next, i, kilk_fil=0;
+    int user_action_filter, user_action_filter_next, i, count_fil=0;
     float max_cost=100000, min_cost=0;
 
     strcpy(fil_gender, "Усі");
@@ -209,14 +197,14 @@ void filter_choose(struct prod_info products[19])
                     printf("\tНазва: %s\n", products[i].name);
                     printf("\tКод: %d\n", products[i].code);
                     printf("\tГендер: %s\n", products[i].gender);
-                    printf("\tРазмір: %s\n", products[i].size);
+                    printf("\tРозмір: %s\n", products[i].size);
                     printf("\tЦіна: %.2f\n", products[i].cost);
-                    kilk_fil=kilk_fil+1;
+                    count_fil=count_fil+1;
                 }
             }
         }
     }
-    if (kilk_fil==0)
+    if (count_fil==0)
     {
         printf("--------------------------------------------------------\n");
         printf ("Немає продуктів за заданим фільтром\n");
@@ -237,7 +225,7 @@ void seach_prod(struct prod_info products[19])
             printf("\tНазва: %s\n", products[i].name);
             printf("\tКод: %d\n", products[i].code);
             printf("\tГендер: %s\n", products[i].gender);
-            printf("\tРазмір: %s\n", products[i].size);
+            printf("\tРозмір: %s\n", products[i].size);
             printf("\tЦіна: %.2f\n", products[i].cost);
             absent=1;
             break;
@@ -249,7 +237,7 @@ void seach_prod(struct prod_info products[19])
         }
 }
 
-int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
+int add_prod (struct prod_info products[19], int cart[100], int count_cart)
 {
     int user_code, absent=0, i, user_action_prod, j;
     printf ("\t1. Додати продукт\n");
@@ -270,10 +258,10 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
             {
                 if (products[i].code==user_code)
                 {
-                    cart[kilk_cart]=products[i].code;
-                    kilk_cart = kilk_cart+1;
+                    cart[count_cart]=products[i].code;
+                    count_cart = count_cart+1;
                     printf("--------------------------------------------------------\n");
-                    printf ("Було додано продукт %d до кошика\n", cart[kilk_cart-1]);
+                    printf ("Було додано продукт %d до кошика\n", cart[count_cart-1]);
                     absent=1;
                     break;
                 }
@@ -290,13 +278,13 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
             printf("--------------------------------------------------------\n");
             printf ("Введіть код бажаного продукту: ");
             scanf ("%d", &user_code);
-            for (j=0;j<kilk_cart;j++)
+            for (j=0;j<count_cart;j++)
             {
                 if (cart[j]==user_code)
                 {
-                    cart[j]=cart[kilk_cart];
-                    cart[kilk_cart]=0;
-                    kilk_cart = kilk_cart-1;
+                    cart[j]=cart[count_cart];
+                    cart[count_cart]=0;
+                    count_cart = count_cart-1;
                     printf("--------------------------------------------------------\n");
                     printf ("Було видалено продукт %d з кошика\n", user_code);
                     absent=1;
@@ -323,19 +311,19 @@ int add_prod (struct prod_info products[19], int cart[100], int kilk_cart)
             printf("--------------------------------------------------------\n");
         }
     }
-    return kilk_cart;
+    return count_cart;
 }
 
-void cart_output(struct prod_info products[19], int cart[100], int kilk_cart)
+void cart_output(struct prod_info products[19], int cart[100], int count_cart)
 {
     int i, j;
-    if (kilk_cart==0)
+    if (count_cart==0)
     {
         printf ("В кошику немає товарів\n");
     }
     else
     {
-        for (j=0;j<=kilk_cart;j++)
+        for (j=0;j<=count_cart;j++)
         {
             for (i=0;i<19;i++)
             {
@@ -345,7 +333,7 @@ void cart_output(struct prod_info products[19], int cart[100], int kilk_cart)
                     printf("\tНазва: %s\n", products[i].name);
                     printf("\tКод: %d\n", products[i].code);
                     printf("\tГендер: %s\n", products[i].gender);
-                    printf("\tРазмір: %s\n", products[i].size);
+                    printf("\tРозмір: %s\n", products[i].size);
                     printf("\tЦіна: %.2f\n", products[i].cost);
                     printf("----------------------------\n");
                 }
@@ -354,14 +342,14 @@ void cart_output(struct prod_info products[19], int cart[100], int kilk_cart)
     }
 }
 
-float order_process(struct prod_info products[19], int cart[100], int kilk_cart, int kilk_order, float total_order)
+float order_process(struct prod_info products[19], int cart[100], int count_cart, int count_order, float total_order)
 {
     FILE *order_history;
     order_history = fopen("order_history", "a");
     int i, j;
     float total=0.00;
 
-    if (kilk_cart==0)
+    if (count_cart==0)
     {
         printf ("В кошику немає продуктів\n");
     }
@@ -369,8 +357,8 @@ float order_process(struct prod_info products[19], int cart[100], int kilk_cart,
     {
        printf ("В вашому кошику є:\n");
        printf("----------------------------\n");
-       fprintf (order_history, "Замовлення %d:\n", kilk_order);
-        for (j=0; j<=kilk_cart; j++)
+       fprintf (order_history, "Замовлення %d:\n", count_order);
+        for (j=0; j<=count_cart; j++)
         {
             for (i=0; i<19; i++)
             {
@@ -394,12 +382,12 @@ float order_process(struct prod_info products[19], int cart[100], int kilk_cart,
     return total_order;
 }
 
-void all_order(int kilk_order, float total_order)
+void all_order(int count_order, float total_order)
 {
     FILE *order_history;
     order_history = fopen("order_history", "r");
 
-    if (kilk_order == 0)
+    if (count_order == 0)
     {
         printf("--------------------------------------------------------\n");
         printf("Історія замовлень порожня\n");
@@ -427,12 +415,12 @@ int main()
     int delay = 1000000;
 
     struct prod_info products[19];
-    katalog (products);
+    init_catalog_data (products);
 
     int cart[100];
-    float kilk_cart=0;
+    float count_cart=0;
 
-    int kilk_order = 0, total_order = 0;
+    int count_order = 0, total_order = 0;
 
     FILE *order_history;
     order_history = fopen("order_history", "w+");
@@ -445,7 +433,7 @@ int main()
         {
         case 1:
             {
-                katalog_output(products);
+                init_catalog_data_output(products);
                 continue;
             }
         case 2:
@@ -460,30 +448,30 @@ int main()
             }
         case 4:
             {
-                kilk_cart = add_prod(products, cart, kilk_cart);
+                count_cart = add_prod(products, cart, count_cart);
                 continue;
             }
         case 5:
             {
-                cart_output(products, cart, kilk_cart);
+                cart_output(products, cart, count_cart);
                 continue;
             }
         case 6:
             {
-                kilk_order = kilk_order+1;
-                total_order = order_process(products, cart, kilk_cart, kilk_order, total_order);
-                kilk_cart = 0;
+                count_order = count_order+1;
+                total_order = order_process(products, cart, count_cart, count_order, total_order);
+                count_cart = 0;
                 continue;
             }
         case 7:
             {
-                all_order(kilk_order, total_order);
+                all_order(count_order, total_order);
                 continue;
             }
 
         case 8:
             {
-                our_project();
+                show_project_info();
                 continue;
             }
 
@@ -496,7 +484,6 @@ int main()
                     fflush(stdout);
                     usleep(delay);
                 }
-                printf("Вихід\n");
                 break;
             }
         default:
@@ -509,11 +496,11 @@ int main()
             }
         }
     }
-    katalog();
+    init_catalog_data();
     return 0;
 }
 
-void katalog(struct prod_info products[19])
+void init_catalog_data(struct prod_info products[19])
 {
     strcpy(products[0].name, "Футболка");
     products[0].code = 7643;
@@ -631,7 +618,7 @@ void katalog(struct prod_info products[19])
 
 }
 
-void our_project()
+void show_project_info()
 {
     printf ("Тема нашої командної роботи Інтернет-магазин одягу\n");
     printf ("В програмі реалізовані головні вимоги інтернет магазину, а саме:\n");
