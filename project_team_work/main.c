@@ -44,7 +44,7 @@ int menu (int user_action)
     return user_action;
 }
 
-void show_init_catalog_data_output(int total_products, struct prod_info products[total_products])
+void show_init_catalog_data(int total_products, struct prod_info products[total_products])
 {
     printf("\tКаталог одягу:\n");
     for (int i = 0; i < total_products; i++)
