@@ -12,6 +12,16 @@ struct prod_info
     float cost;
 };
 
+void show_catalog_data (int id_product, struct prod_info products[19])
+{
+    printf("Продукт №%d:\n", id_product + 1);
+    printf("\tНазва: %s\n", products[id_product].name);
+    printf("\tКод: %d\n", products[id_product].code);
+    printf("\tГендер: %s\n", products[id_product].gender);
+    printf("\tРозмір: %s\n", products[id_product].size);
+    printf("\tЦіна: %.2f\n", products[id_product].cost);
+}
+
 int menu (int user_action)
 {
     printf("--------------------------------------------------------\n");
@@ -39,14 +49,8 @@ void init_catalog_data_output(struct prod_info products[19])
     printf("\tКаталог одягу:\n");
     for (int i = 0; i < 19; i++)
     {
-        printf("----------------------------");
-        printf("\nПродукт №%d:\n", i + 1);
-        printf("\tНазва: %s\n", products[i].name);
-        printf("\tКод: %d\n", products[i].code);
-        printf("\tГендер: %s\n", products[i].gender);
-        printf("\tРозмір: %s\n", products[i].size);
-        printf("\tЦіна: %.2f\n", products[i].cost);
-
+        printf("----------------------------\n");
+        show_catalog_data (i, products);
     }
     printf ("\n");
 }
@@ -193,12 +197,7 @@ void filter_choose(struct prod_info products[19])
                 if ((products[i].cost<=max_cost)&&(products[i].cost>=min_cost))
                 {
                     printf("----------------------------\n");
-                    printf("Продукт №%d:\n", i + 1);
-                    printf("\tНазва: %s\n", products[i].name);
-                    printf("\tКод: %d\n", products[i].code);
-                    printf("\tГендер: %s\n", products[i].gender);
-                    printf("\tРозмір: %s\n", products[i].size);
-                    printf("\tЦіна: %.2f\n", products[i].cost);
+                    show_catalog_data (i, products);
                     count_fil=count_fil+1;
                 }
             }
@@ -221,12 +220,7 @@ void seach_prod(struct prod_info products[19])
     {
         if (products[i].code==user_code)
         {
-            printf("Продукт #%d:\n", i + 1);
-            printf("\tНазва: %s\n", products[i].name);
-            printf("\tКод: %d\n", products[i].code);
-            printf("\tГендер: %s\n", products[i].gender);
-            printf("\tРозмір: %s\n", products[i].size);
-            printf("\tЦіна: %.2f\n", products[i].cost);
+            show_catalog_data (i, products);
             absent=1;
             break;
         }
@@ -329,12 +323,7 @@ void cart_output(struct prod_info products[19], int cart[100], int count_cart)
             {
                 if (cart[j]==products[i].code)
                 {
-                    printf("Продукт #%d:\n", i + 1);
-                    printf("\tНазва: %s\n", products[i].name);
-                    printf("\tКод: %d\n", products[i].code);
-                    printf("\tГендер: %s\n", products[i].gender);
-                    printf("\tРозмір: %s\n", products[i].size);
-                    printf("\tЦіна: %.2f\n", products[i].cost);
+                    show_catalog_data (i, products);
                     printf("----------------------------\n");
                 }
             }
